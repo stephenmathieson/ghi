@@ -1,5 +1,9 @@
 {
   "name": "ghi",
+  "version": "0.0.0",
+  "description": "github repo installer",
+  "keywords": ["github", "install"],
+  "license": "MIT",
   "repo": "stephenmathieson/ghi",
   "dependencies": {
     "commander": "1.3.2",
