@@ -5,7 +5,7 @@ SRC = ghi.c
 DEPS = $(wildcard deps/*/*.c)
 OBJS = ghi.o $(DEPS:.c=.o)
 CFLAGS = -std=c99 -Wall -Wextra -Ideps
-CFLAGS += -DGHI_VERSION=\"0.0.0\" -D_POSIX_C_SOURCE=200809L
+CFLAGS += -DGHI_VERSION=\"0.1.1\" -D_POSIX_C_SOURCE=200809L
 LDFLAGS = -lcurl
 
 $(BIN): $(OBJS)
