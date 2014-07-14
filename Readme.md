@@ -3,6 +3,20 @@
 
   Install a project on GitHib by running its `make install` script.  Basically, clib-install(1) without the `package.json` requirement.
 
+## Installation
+
+  Expects [libcurl](http://curl.haxx.se/libcurl/) to be installed and linkable.
+
+  With [clib](https://github.com/clibs/clib), do:
+
+    $ clib install stephenmathieson/ghi
+
+  With git, do:
+
+    $ git clone https://github.com/stephenmathieson/ghi.git /tmp/ghi
+    $ cd /tmp/ghi
+    $ make && [sudo] make install
+
 ## Usage
 
 ```
