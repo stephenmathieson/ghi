@@ -21,6 +21,7 @@
 struct options {
   char *dir;
   int show_output;
+  char *command;
 };
 
 
@@ -38,6 +39,15 @@ void
 set_output_directory(command_t *self) {
   if (opts.dir) free(opts.dir);
   opts.dir = strdup((char *) self->arg);
+}
+
+/**
+ * Set the install command.
+ */
+
+void
+set_install_command(command_t *self) {
+  opts.command = (char *) self->arg;
 }
 
 /**
@@ -133,10 +143,11 @@ install(char *repo) {
   );
   ASPRINTF(
       &install_command
-    , "make -C %s/%s-%s install"
+    , "cd %s/%s-%s && %s"
     , opts.dir
     , name
     , version
+    , opts.command
   );
 
   #undef ASPRINTF
@@ -236,6 +247,7 @@ main(int argc, char **argv) {
   }
   opts.dir = temp;
   opts.show_output = 0;
+  opts.command = "make install";
 
   command_init(&program, "ghi", GHI_VERSION);
   program.usage = "[options] <repo ...>";
@@ -250,8 +262,15 @@ main(int argc, char **argv) {
       &program
     , "-s"
     , "--show-output"
-    , "show 'make install' output"
+    , "show install output"
     , set_show_output
+  );
+  command_option(
+      &program
+    , "-c"
+    , "--command <command>"
+    , "use a custom command"
+    , set_install_command
   );
   command_parse(&program, argc, argv);
 
