@@ -3,9 +3,11 @@ BIN ?= ghi
 PREFIX ?= /usr/local
 SRC = ghi.c
 DEPS = $(wildcard deps/*/*.c)
+GHI_VERSION := `node -pe "require('./package.json').version"`
 OBJS = ghi.o $(DEPS:.c=.o)
 CFLAGS = -std=c99 -Wall -Wextra -Ideps
-CFLAGS += -DGHI_VERSION=\"0.1.1\" -D_POSIX_C_SOURCE=200809L
+CFLAGS += -D_POSIX_C_SOURCE=200809L
+CFLAGS += -DGHI_VERSION=\"$(GHI_VERSION)\"
 LDFLAGS = -lcurl
 
 $(BIN): $(OBJS)
