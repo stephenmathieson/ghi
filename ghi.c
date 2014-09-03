@@ -96,68 +96,50 @@ install(char *repo) {
 
   // parse repo
   if (!(owner = parse_repo_owner(repo, NULL))) {
-    logger_error("error", "unable to parse repository owner ('%s')", repo);
+    ERROR("unable to parse repository owner ('%s')", repo);
     rc = 1;
     goto done;
   }
 
   if (!(name = parse_repo_name(repo))) {
-    fprintf(stderr, "error parsing repository name (\"%s\")\n", repo);
+    ERROR("unable to parse repository name ('%s')", repo);
     rc = 1;
     goto done;
   }
 
   if (!(version = parse_repo_version(repo, "master"))) {
-    fprintf(stderr, "error parsing repository version (\"%s\")\n", repo);
+    ERROR("unable to parse repository version ('%s')", repo);
     rc = 1;
     goto done;
   }
 
-  rc = asprintf(
-      &tarball
-    , TARBALL_FORMAT
-    , owner
-    , name
-    , version
-  );
-  if (-1 == rc) {
-    ERROR("error allocating memory (asprintf())");
-    rc = 1;
-    goto done;
-  }
+  #define ASPRINTF(...) ({                                           \
+    rc = asprintf(__VA_ARGS__);                                      \
+    if (-1 == rc) {                                                  \
+      ERROR("unable to allocate memory");                            \
+      rc = 1;                                                        \
+      goto done;                                                     \
+    }                                                                \
+  });
 
-  rc = asprintf(&file, "%s/%s-%s.tar.gz", opts.dir, name, owner);
-  if (-1 == rc) {
-    ERROR("error allocating memory (asprintf())");
-    rc = 1;
-    goto done;
-  }
-
-  rc = asprintf(
+  ASPRINTF(&tarball, TARBALL_FORMAT, owner, name, version);
+  ASPRINTF(&file, "%s/%s-%s.tar.gz", opts.dir, name, owner);
+  ASPRINTF(
       &untar_command
     , "cd %s && tar -xf %s-%s.tar.gz"
     , opts.dir
     , name
     , owner
   );
-  if (-1 == rc) {
-    ERROR("error allocating memory (asprintf())");
-    rc = 1;
-    goto done;
-  }
-
-  rc = asprintf(
+  ASPRINTF(
       &install_command
     , "make -C %s/%s-%s install"
     , opts.dir
     , name
     , version
   );
-  if (-1 == rc) {
-    ERROR("error allocating memory (asprintf())");
-    rc = 1;
-    goto done;
-  }
+
+  #undef ASPRINTF
 
   logger_info("fetch", tarball);
   rc = http_get_file(tarball, file);
@@ -235,7 +217,6 @@ install_repos(char **repos, int count) {
 
   return batch_end(batch);
 }
-
 
 /**
  * Entry point.
