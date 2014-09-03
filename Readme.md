@@ -29,7 +29,8 @@ $ ./ghi --help
     -V, --version                 output program version
     -h, --help                    output help information
     -o, --out <dir>               set the download directory
-    -s, --show-output             show 'make install' output
+    -s, --show-output             show install output
+    -c, --command <command>       use a custom command
 ```
 
 ## Examples
@@ -60,6 +61,13 @@ $ ./ghi stephenmathieson/git-{standup,sync,upstream} visionmedia/watch -o ./repo
    installed : stephenmathieson/git-upstream
    installed : visionmedia/watch
 
+```
+
+  Install someuser/somerepo using command `./configure && make && make install`:
+
+```sh
+$ ./ghi someuser/somerepo --command "./configure && make && make install"
+  [ ... ]
 ```
 
 ## Updating
