@@ -69,8 +69,7 @@ spawn_command(const char *command, int pipe) {
   FILE *fp;
   int rc;
 
-  fp = popen(command, "r");
-  if (NULL == fp) {
+  if (NULL == (fp = popen(command, "r"))) {
     ERROR("failed to pipe output");
     return 1;
   }
@@ -80,8 +79,7 @@ spawn_command(const char *command, int pipe) {
     if (pipe) printf("%s", buf);
   }
 
-  rc = pclose(fp);
-  if (-1 == rc) {
+  if (-1 == (rc = pclose(fp))) {
     ERROR("unable to close pipe");
     return 1;
   }
@@ -153,8 +151,7 @@ install(char *repo) {
   #undef ASPRINTF
 
   logger_info("fetch", tarball);
-  rc = http_get_file(tarball, file);
-  if (-1 == rc) {
+  if (-1 == (rc = http_get_file(tarball, file))) {
     ERROR("failed to fetch %s", tarball);
     rc = 1;
     goto done;
@@ -205,8 +202,7 @@ install_repos(char **repos, int count) {
   batch_t *batch = NULL;
   batch_error_t error;
 
-  batch = batch_new(5);
-  if (NULL == batch) {
+  if (!(batch = batch_new(5))) {
     ERROR("unable to allocate memory");
     return BATCH_MALLOC_ERROR;
   }
@@ -220,8 +216,7 @@ install_repos(char **repos, int count) {
     usleep(500);
   }
 
-  error = batch_wait(batch);
-  if (0 != error) {
+  if (0 != (error = batch_wait(batch))) {
     batch_end(batch);
     return error;
   }
@@ -240,8 +235,7 @@ main(int argc, char **argv) {
   char *temp = NULL;
   batch_error_t batch_error;
 
-  temp = gettempdir();
-  if (NULL == temp) {
+  if (!(temp = gettempdir())) {
     ERROR("unable to allocate memory (gettempdir())");
     return 1;
   }
@@ -280,15 +274,13 @@ main(int argc, char **argv) {
     goto done;
   }
 
-  rc = mkdirp(opts.dir, 0777);
-  if (-1 == rc) {
+  if (-1 == (rc = mkdirp(opts.dir, 0777))) {
     ERROR("unable to create directory %s", opts.dir);
     rc = 1;
     goto done;
   }
 
-  batch_error = install_repos(program.argv, program.argc);
-  if (0 != batch_error) {
+  if (0 != (batch_error = install_repos(program.argv, program.argc))) {
     ERROR(batch_error_string(batch_error));
     rc = 1;
   }
