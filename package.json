@@ -13,7 +13,7 @@
     "stephenmathieson/http-get.c": "0.1.1",
     "stephenmathieson/parse-repo.c": "1.1.1",
     "stephenmathieson/mkdirp.c": "0.1.5",
-    "logger": "0.0.0",
+    "logger": "0.0.1",
     "stephenmathieson/batch.c": "0.0.0"
   },
   "install": "make install",
