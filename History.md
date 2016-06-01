@@ -1,4 +1,12 @@
 
+0.2.1 / 2016-06-01
+==================
+
+  * package: update "logger" to 0.0.1 (#4, @jwerle)
+  * ghi: Use one-line conditionals
+  * package: Update dependencies
+  * travis: Update before installing deps
+
 0.2.0 / 2014-09-03
 ==================
 
