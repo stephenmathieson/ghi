@@ -1,6 +1,6 @@
 {
   "name": "logger",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "repo": "clibs/logger",
   "src": ["logger.h"],
   "dependencies": {
